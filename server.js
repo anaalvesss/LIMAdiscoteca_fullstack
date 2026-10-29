@@ -59,3 +59,7 @@ const porta = 3000
 //rotas
 app.get("/listar", mostrarDiscos)
 app.post("/cadastrar", novoDisco)
+
+app.listen(porta, ()=>{
+    console.log(`Servidor rodando porta ${porta}`)
+})
