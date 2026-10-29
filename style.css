@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: arial, sans-serif;
+    background-color: aliceblue;
+    color: brown;
+}
+header{
+    background: #591c02;
+    color: ghostwhite;
+    padding: 30px 8%;
+    border-bottom: 4px solid #a75955cb;
+}
+header h1{
+    margin-bottom: 8px;
+    font-weight: 900;
+}
+header p{
+    color: rgba(255, 228, 219, 0.893);
+}
+.container{
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.titulo-secao{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+.titulo-secao h2{
+    margin-bottom: 8px;
+}
+.titulo-secao p{
+    color: #743330b1;
+}
+button{
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    background: #733431;
+    color: aliceblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover{
+    background:  brown;
+}
+.listar-discos{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+#mensagemVazia{
+    color: darkred;
+}
+.card-disco{
+    background: aliceblue;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #000000;
+}
+.capa{
+    height: 170px;
+    background: #591c02;
+    color: azure;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info-disco{
+    padding: 18px;
+}
+.info-disco h3{
+    margin-bottom: 8px;
+}
+.info-disco p{
+    margin-top: 8px;
+    color: rgb(255, 246, 235);
+    overflow-wrap: anywhere;
+}
+.preco{
+    display: block;
+    color: brown;
+    font-size: 20px;
+    margin-top: 1px;
+}
+dialog{
+    width: min(90%, 420px);
+    margin: auto;
+    padding: 25px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px #000;
+}
+dialog::backdrop{
+    background: #00000099;
+}
+dialog h2{
+    margin-bottom: 20px;
+}
+form label{
+    display: block;
+    margin: 14px 0 6px;
+    font-weight:  bold;
+}
+form input{
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #fff7d2cb;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.acoes{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+button.cancelar{
+    background: whitesmoke;
+    color: darkred;
+}
+button.cancelar:hover{
+    background: whitesmoke;
+}
+.capa img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
