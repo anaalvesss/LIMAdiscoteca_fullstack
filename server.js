@@ -30,5 +30,14 @@ const mostrarDiscos = (req, res) => {
 }
 //cadastrar discos
 const novoDisco = (req, res) => {
-    const{album, artista, genero, imagem, preco}=req.body
+    const{album, artista, genero, imagem, preco} = req.body
+
+    if(album && artista && genero && imagem && preco){
+        const sql = "INSERT INTO discos (album, artista, genero, imagem_url, preco) VALUES (?, ?, ?, ?, ?)"
+        const valores = [album, artista, genero, imagem, preco]
+
+        db.query(sql, valores,(erro, resultado)=>{
+            
+        })
+    }
 }
