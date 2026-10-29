@@ -37,7 +37,13 @@ const novoDisco = (req, res) => {
         const valores = [album, artista, genero, imagem, preco]
 
         db.query(sql, valores,(erro, resultado)=>{
-            
+            if(erro){
+                return res.status(500).send("Erro ao inserir disco")
+            }
+            res.send("Disco cadastrado com sucesso")
         })
+    }else{
+        res.status(400).send("Erro: Preencha todos os campos")
     }
 }
+//middlewares
