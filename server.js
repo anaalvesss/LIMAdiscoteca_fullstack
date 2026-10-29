@@ -25,5 +25,10 @@ const mostrarDiscos = (req, res) => {
         if(erro){
             return res.status(500).send("Erro ao consultar o DB")
         }
+        res.send(resultados)
     })
+}
+//cadastrar discos
+const novoDisco = (req, res) => {
+    const{album, artista, genero, imagem, preco}=req.body
 }
