@@ -52,7 +52,7 @@ form.addEventListener("submit", (evento)=>{
         preco: Number(document.getElementById("preco").value)
 }
     try{
-        const resposta =  await fetch(API_URL + '/cadastrar',{
+        const resposta = await fetch(API_URL + '/cadastrar',{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
