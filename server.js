@@ -1,66 +1,76 @@
-const express = require('express');
-const cors = require('cors');
-const mysql = require('mysql2');
+const express = require("express")
+const cors = require("cors")
+const mysql = require("mysql2")
 
+//Configuração conexão BD
 const db = mysql.createConnection({
-    host: "localhost", 
+    host: "localhost",
     user: "root",
-    password: "",
-    database: "db_discoteca"
+    password:"",
+    database:"db_discoteca"
 })
 
-//testar conexão
 db.connect((erro)=>{
     if(erro){
-        console.error("Erro ao conectar:", erro)
-    }else{
-        console.log("Conectado ao DB")
+        console.error("Erro ao conectar o mysql:", erro)
+    } else {
+        console.log("Conectado ao BD com sucesso!")
     }
 })
 
-//listar todos os discos
+//Listar Discos
 const mostrarDiscos = (req, res) => {
-    const sql = "SELECT album , artista, genero, imagem_url AS imagem, preco FROM discos"
-    db.query(sql, (erro, resultado) => {
+    const sql = "SELECT id, album, artista, genero, imagem_url, preco from discos"
+
+    db.query(sql,(erro, resultados)=>{
         if(erro){
-            return res.status(500).json({erro: "Erro ao consultar o BD"})
+            return res.status(500).send("Erro ao consultar o BD")
         }
-        res.json(resultado)
+        res.send(resultados)
     })
 }
-//Cadastrar Discos
-const cadastrarDisco = (req, res) => {
-    const { album, artista, genero, imagem, preco } = req.body
+//Cadastrar Disco
+const novoDisco = (req, res)=>{
+    const{album, artista, genero, imagem, preco}= req.body
+
+        if(album && artista && genero && imagem && preco){
+            const sql = "INSERT INTO discos (album, artista, genero, imagem_url, preco) VALUES (?, ?, ?, ?, ?)"
+            const valores = [album, artista, genero, imagem, preco]
+
+            db.query(sql, valores, (erro, resultado)=>{
+                if(erro){
+                    return res.status(500).send("Erro ao inserir disco")
+                }
+                res.send("Disco cadastrado com sucesso")
+            })
+        }else{
+            res.status(400).send("Erro: Preencha todos os campos")
+        }
+}
+
+//Alterar Discos
+const atualizarDisco = (req, res)=>{
+    const {id} = req.params
+    const  {album, artista, genero, imagem, preco} = req.body
 
     if(album && artista && genero && imagem && preco){
-        const sql = "INSERT INTO discos (album, artista, genero, imagem_url, preco) VALUES (?, ?, ?, ?, ?)"
-        const valores = [album, artista, genero, imagem, preco]
-
-        db.query(sql, valores, (erro, resultado) => {
-            if(erro){
-                return res.status(500).json({erro: "Erro ao inserir disco"})
-    
-            }
-            res.send("Disco cadastrado com sucesso")
-        })
-    }else{
-        res.status(400).json({erro: "Erro: preencha todos os campos"})
+        const sql = "UPDATE discos SET album =?, artista = ?, genero = ?, imagem_url = ?, preco = ? WHERE id = ?"
     }
 }
-//Middleware
 
+//Middlewares
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-const PORT = 3000
+const porta = 3000
 
 //Rotas
-app.get("/listar", mostrarDiscos)
-app.post("/cadastrar", cadastrarDisco)
+app.get("/listar",mostrarDiscos)
+app.post("/cadastrar", novoDisco)
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`)
+app.listen(porta,()=>{
+    console.log(`Servidor rodando (alegria) porta ${porta}`)
 })

@@ -1,48 +1,46 @@
 const API_URL = "http://localhost:3000"
 
-const btnCadastrar = document.getElementById("btnCadastrar")
-const btnCancelar = document.getElementById("btnCancelar")
-const modal = document.getElementById("modalCadastro")
-const form = document.getElementById("formDisco")
-const lista = document.getElementById("listarDiscos")
-const mensagemVazia = document.getElementById("mensagemVazia")
+const btnCadastrar = document.getElementById('btnCadastrar')
+const btnCancelar = document.getElementById('btnCancelar')
+const modal = document.getElementById('modalCadastro')
+const form = document.getElementById('formDisco')
+const lista = document.getElementById('listarDiscos')
+const mensagemVazia = document.getElementById('mensagemVazia')
 
-btnCadastrar.addEventListener("click", ()=> {
-    modal.showModal()
+btnCadastrar.addEventListener("click", () => {
+    modal.showModal();
 })
 
-btnCancelar.addEventListener("click", ()=> {
-    modal.close()
+btnCancelar.addEventListener("click", () => {
+    modal.close();
 })
-
-// carregar os discos do DB(GET)
+//Carregando as informações do BD (GET)
 async function carregarDiscos() {
     try {
         const resposta = await fetch(API_URL + '/listar')
         const discos = await resposta.json()
 
-        lista.innerHTML = "" 
+        lista.innerHTML = ""
 
         if (discos.length === 0) {
             mensagemVazia.hidden = false
-            lista.appendChild(mensagemVazia)    
+            lista.appendChild(mensagemVazia)
             return
-        }    
-
+        }
         mensagemVazia.hidden = true
-        //Renderize os discos encontrados
+        //Renderizar
         discos.forEach(disco => {
-            criarCard(disco.album, disco.artista, disco.genero, disco.imagem, disco.preco)
-        })    
-    }catch (erro) {
-        console.error("Erro ao carregar discos:", erro) 
-        alert("Erro ao carregar discos. Por favor, tente novamente mais tarde.")
-
+            criarCard(disco.album, disco.artista, disco.genero, disco.imagem_url, disco.preco)
+        })
+    } catch (erro) {
+        console.error("Erro ao carregar discos:", erro)
+        alert("Não foi possivel conectar ao servidor")
     }
 }
-//Cadastrar novo Discos(POST)
+//Cadastrar novo disco (post)
 
-form.addEventListener("submit", async(evento)=>{
+
+form.addEventListener("submit", async (evento) => {
     evento.preventDefault()
 
     const novoDisco = {
@@ -51,32 +49,30 @@ form.addEventListener("submit", async(evento)=>{
         genero: document.getElementById("genero").value.trim(),
         imagem: document.getElementById("imagem").value.trim(),
         preco: Number(document.getElementById("preco").value)
-}
-    try{
+    }
+    try {
         const resposta = await fetch(API_URL + '/cadastrar', {
-            method: 'POST',
+            method: "POST",
             headers: {
-               "Content-Type": "application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(novoDisco)
-
         })
-        
-        if (!resposta.ok) {
+        if (resposta.ok) {
             form.reset()
             modal.close()
             carregarDiscos()
-        }else{  
-            alert("erro ao salvar discos. verifique BD")
+        }else{
+            alert("Erro ao salvar disco. Verificar database")
         }
-    }catch {
-        console.error("Erro na requisição:", erro)    
+    }catch (erro){
+        console.error("Erro na requisição:", erro)
         alert("Erro de conexão com o servidor")
     }
-
-
+  
 })
-function criarCard(album, artista, genero, imagem, preco) {
+
+function criarCard(album, artista, genero, imagem, preco){
     const card = document.createElement("article")
     card.classList.add("card-disco")
 
@@ -94,17 +90,19 @@ function criarCard(album, artista, genero, imagem, preco) {
     titulo.textContent = album
 
     const nomeArtista = document.createElement("p")
-    nomeArtista.textContent = "Artista: " + artista 
+    nomeArtista.textContent = "Artista: " + artista
 
     const nomeGenero = document.createElement("p")
-    nomeGenero.textContent = "Gênero: " + genero
+    nomeGenero.textContent = "Gênero: " + genero;
 
     const valor = document.createElement("strong")
     valor.classList.add("preco")
-    valor.textContent = preco.toLocaleString("pt-BR", {style:"currency", currency:"BRL"})
+    valor.textContent = preco.toLocaleString("pt-BR",{style: "currency",currency:"BRL"})
 
-    info.append(titulo,nomeArtista,nomeGenero,valor)
-    card.append(capa,info)
-    lista.appendChild(card)
+    info.append(titulo, nomeArtista, nomeGenero, valor)
+    card.append(capa, info)
+    lista.append(card)
+
+
 }
 carregarDiscos()
