@@ -1,5 +1,3 @@
-const { memo } = require("react")
-
 const API_URL = "http://localhost:3000"
 
 const btnCadastrar = document.getElementById("btnCadastrar")
@@ -7,41 +5,44 @@ const btnCancelar = document.getElementById("btnCancelar")
 const modal = document.getElementById("modalCadastro")
 const form = document.getElementById("formDisco")
 const lista = document.getElementById("listarDiscos")
-const mansagemVazia = document.getElementById("mensagemVazia")
+const mensagemVazia = document.getElementById("mensagemVazia")
 
 btnCadastrar.addEventListener("click", ()=> {
     modal.showModal()
 })
+
 btnCancelar.addEventListener("click", ()=> {
     modal.close()
 })
 
 // carregar os discos do DB(GET)
 async function carregarDiscos() {
-    try{
+    try {
         const resposta = await fetch(API_URL + '/listar')
         const discos = await resposta.json()
 
-        lista.innerHTML=""
+        lista.innerHTML = "" 
 
-        if(discos.length == 0){
+        if (discos.length === 0) {
             mensagemVazia.hidden = false
-            lista.appendChild(mensagemVazia)
+            lista.appendChild(mensagemVazia)    
             return
-        }
+        }    
+
         mensagemVazia.hidden = true
-        //renderizar os discos encontrados
+        //Renderize os discos encontrados
         discos.forEach(disco => {
             criarCard(disco.album, disco.artista, disco.genero, disco.imagem, disco.preco)
-        })
-    }catch (erro){
-        console.error("Erro ao carregar discos: ", erro)
-        alert("Não foi possível conectar ao servidor")
+        })    
+    }catch (erro) {
+        console.error("Erro ao carregar discos:", erro) 
+        alert("Erro ao carregar discos. Por favor, tente novamente mais tarde.")
+
     }
 }
+//Cadastrar novo Discos(POST)
 
-//cadastrar novo disco (POST)
-form.addEventListener("submit", (evento)=>{
+form.addEventListener("submit", async(evento)=>{
     evento.preventDefault()
 
     const novoDisco = {
@@ -52,24 +53,27 @@ form.addEventListener("submit", (evento)=>{
         preco: Number(document.getElementById("preco").value)
 }
     try{
-        const resposta = await fetch(API_URL + '/cadastrar',{
-            method: "POST",
+        const resposta = await fetch(API_URL + '/cadastrar', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+               "Content-Type": "application/json"
             },
             body: JSON.stringify(novoDisco)
+
         })
-        if(resposta.ok){
+        
+        if (!resposta.ok) {
             form.reset()
             modal.close()
             carregarDiscos()
-        }else{
-            alert("Erro ao salvar discos. Verifique DB")
+        }else{  
+            alert("erro ao salvar discos. verifique BD")
         }
-    }catch{
-        console.error("Erro na requisição: ", erro)
+    }catch {
+        console.error("Erro na requisição:", erro)    
         alert("Erro de conexão com o servidor")
     }
+
 
 })
 function criarCard(album, artista, genero, imagem, preco) {

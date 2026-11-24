@@ -1,6 +1,6 @@
-const express = require('express')
-const cors = require('cors')
-const mysql = require('mysql2')
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql2');
 
 const db = mysql.createConnection({
     host: "localhost", 
@@ -21,45 +21,46 @@ db.connect((erro)=>{
 //listar todos os discos
 const mostrarDiscos = (req, res) => {
     const sql = "SELECT album , artista, genero, imagem_url AS imagem, preco FROM discos"
-    db.query(sql,(erro, resultados)=>{
+    db.query(sql, (erro, resultado) => {
         if(erro){
-            return res.status(500).send("Erro ao consultar o DB")
+            return res.status(500).json({erro: "Erro ao consultar o BD"})
         }
-        res.send(resultados)
+        res.json(resultado)
     })
 }
-//cadastrar discos
-const novoDisco = (req, res) => {
-    const{album, artista, genero, imagem, preco} = req.body
+//Cadastrar Discos
+const cadastrarDisco = (req, res) => {
+    const { album, artista, genero, imagem, preco } = req.body
 
     if(album && artista && genero && imagem && preco){
         const sql = "INSERT INTO discos (album, artista, genero, imagem_url, preco) VALUES (?, ?, ?, ?, ?)"
         const valores = [album, artista, genero, imagem, preco]
 
-        db.query(sql, valores,(erro, resultado)=>{
+        db.query(sql, valores, (erro, resultado) => {
             if(erro){
-                return res.status(500).send("Erro ao inserir disco")
+                return res.status(500).json({erro: "Erro ao inserir disco"})
+    
             }
             res.send("Disco cadastrado com sucesso")
         })
     }else{
-        res.status(400).send("Erro: Preencha todos os campos")
+        res.status(400).json({erro: "Erro: preencha todos os campos"})
     }
 }
+//Middleware
 
-//middlewares
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-const porta = 3000
+const PORT = 3000
 
-//rotas
+//Rotas
 app.get("/listar", mostrarDiscos)
-app.post("/cadastrar", novoDisco)
+app.post("/cadastrar", cadastrarDisco)
 
-app.listen(porta, ()=>{
-    console.log(`Servidor rodando porta ${porta}`)
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`)
 })
