@@ -47,17 +47,16 @@ const novoDisco = (req, res)=>{
             res.status(400).send("Erro: Preencha todos os campos")
         }
 }
-
-//Alterar Discos
+//Alterar o Disco
 const atualizarDisco = (req, res)=>{
     const {id} = req.params
-    const  {album, artista, genero, imagem, preco} = req.body
+    const {album, artista, genero, imagem, preco} = req.body
 
     if(album && artista && genero && imagem && preco){
-        const sql = "UPDATE discos SET album =?, artista = ?, genero = ?, imagem_url = ?, preco = ? WHERE id = ?"
+        const sql = "UPDATE discos SET album = ?, artista = ?, genero = ?, imagem_url = ?, preco = ? WHERE id = ?"
         const valores = [album, artista, genero, imagem, preco, id]
 
-        db,query(sql,valores,(erro, resultado)=>{
+        db.query(sql,valores,(erro, resultado)=>{
             if(erro){
                 return res.status(500).send("Erro ao atualizar disco")
             }
@@ -67,9 +66,9 @@ const atualizarDisco = (req, res)=>{
         res.status(400).send("Erro: Preencha todos os campos")
     }
 }
-//Delete disco
+//Delete Discos
 const deletarDisco = (req, res)=>{
-    const{id}=req.params 
+    const{id}=req.params
     const sql="DELETE FROM discos WHERE id = ?"
 
     db.query(sql,[id],(erro,resultado)=>{
